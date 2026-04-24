@@ -102,6 +102,7 @@ jobs:
           fi
 
       - name: publish
+        # Uses npm's OIDC trusted-publisher flow (configured in npm package
+        # settings). `id-token: write` above is what makes the runner's OIDC
+        # token available; no NPM_TOKEN secret is needed.
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
