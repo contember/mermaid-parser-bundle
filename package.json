@@ -1,0 +1,69 @@
+{
+  "name": "mermaid-parser-bundle",
+  "version": "0.1.0",
+  "description": "Zero-dependency ESM bundle of mermaid's parsers — all 26 diagram types, no renderer code (no d3, cytoscape, katex, roughjs, …).",
+  "type": "module",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "files": [
+    "dist/index.mjs",
+    "dist/index.d.ts",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "keywords": [
+    "mermaid",
+    "parser",
+    "ast",
+    "flowchart",
+    "sequence-diagram",
+    "class-diagram",
+    "er-diagram",
+    "gantt",
+    "mindmap",
+    "parse-only",
+    "zero-dependency"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/contember/mermaid-parser-bundle.git"
+  },
+  "bugs": {
+    "url": "https://github.com/contember/mermaid-parser-bundle/issues"
+  },
+  "homepage": "https://github.com/contember/mermaid-parser-bundle#readme",
+  "author": "Contember Limited",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "setup": "scripts/setup-mermaid-src.sh",
+    "gen:defaults": "tsx scripts/gen-defaults.mts",
+    "build": "npm run gen:defaults && tsx build-b.ts",
+    "build:baseline": "esbuild src/entry-a.ts --bundle --format=esm --platform=browser --main-fields=module,main --conditions=import,module,browser,default --minify --tree-shaking=true --outfile=dist/bundle-a.esbuild.mjs --metafile=dist/bundle-a.esbuild.meta.json --log-level=warning",
+    "test": "node test/smoke.mjs",
+    "size": "du -sh dist/* 2>/dev/null; echo '---'; ls -lh dist/",
+    "prepublishOnly": "[ -f dist/index.mjs ] || (echo 'run: npm run setup && npm ci && npm run build'; exit 1)"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "esbuild": "^0.28.0",
+    "jison": "^0.4.18",
+    "js-yaml": "^4.1.1",
+    "mermaid": "^11.14.0",
+    "tsx": "^4.21.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

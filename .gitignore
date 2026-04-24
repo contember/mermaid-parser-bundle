@@ -1,0 +1,9 @@
+node_modules/
+dist/
+generated/
+mermaid-src/
+.DS_Store
+*.log
+.env
+.env.*
+coverage/

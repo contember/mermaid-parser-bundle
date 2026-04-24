@@ -1,0 +1,107 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*.*.*']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    name: build & test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: enable pnpm (for mermaid-src install)
+        run: corepack enable
+
+      - name: clone + prepare mermaid-src
+        run: npm run setup
+
+      - name: install wrapper deps
+        run: npm install --ignore-scripts --no-audit --no-fund
+
+      - name: build bundle
+        run: npm run build
+
+      - name: smoke test
+        run: npm test
+
+      - name: show sizes
+        run: |
+          echo "### bundle sizes" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          for f in dist/index.mjs dist/index.unmin.mjs; do
+            [ -f "$f" ] || continue
+            raw=$(stat -c%s "$f")
+            gz=$(gzip -c9 "$f" | wc -c)
+            printf "%-25s raw %7.1f KB  gzip %7.1f KB\n" "$f" $((raw/1024)) $((gz/1024)) >> $GITHUB_STEP_SUMMARY
+          done
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: upload dist (for inspection / release)
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: |
+            dist/index.mjs
+            dist/index.unmin.mjs
+            dist/index.d.ts
+          if-no-files-found: error
+
+  publish:
+    name: publish to npm
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # required for npm provenance
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: enable pnpm
+        run: corepack enable
+
+      - name: clone + prepare mermaid-src
+        run: npm run setup
+
+      - name: install wrapper deps
+        run: npm install --ignore-scripts --no-audit --no-fund
+
+      - name: build bundle
+        run: npm run build
+
+      - name: smoke test
+        run: npm test
+
+      - name: verify tag matches package.json version
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          pkg=$(node -p "require('./package.json').version")
+          if [ "$tag" != "$pkg" ]; then
+            echo "tag v$tag does not match package.json version $pkg" >&2
+            exit 1
+          fi
+
+      - name: publish
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
