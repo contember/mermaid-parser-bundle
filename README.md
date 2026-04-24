@@ -18,10 +18,21 @@ const { type, db } = await parse('flowchart TD\n  A --> B\n  B --> C');
 
 ## Sizes
 
-| Bundle                                                 | Raw         | Gzip       |
-| ------------------------------------------------------ | ----------- | ---------- |
-| `import { parse } from 'mermaid'` (esbuild tree-shake) | 2 978 KB    | 816 KB     |
-| **this package**                                       | **~1 MB**   | **~270 KB** |
+**Install footprint** — what `npm install <pkg>` adds to your project
+(`scripts/measure-install.sh` reproduces this on any machine):
+
+| Package                                    | `node_modules`           | Transitive deps |
+| ------------------------------------------ | ------------------------ | --------------- |
+| `mermaid`                                  | 114 MB                   | 76              |
+| **`mermaid-parser-bundle`**                | **0.9 MB**               | **0** (zero)    |
+
+**Bundle size after tree-shake** — if you already ship mermaid and bundle
+it with esbuild/rolldown:
+
+| Bundled entry                                          | Raw          | Gzip        |
+| ------------------------------------------------------ | ------------ | ----------- |
+| `import { parse } from 'mermaid'` (esbuild tree-shake) | 2 978 KB     | 816 KB      |
+| **`import { parse } from 'mermaid-parser-bundle'`**    | **1 003 KB** | **269 KB**  |
 
 Covers every diagram mermaid registers via `addDiagrams()`:
 flowchart, sequence, class, state, er, gantt, pie, journey, gitGraph, mindmap,
