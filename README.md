@@ -1,7 +1,7 @@
 # mermaid-parser-bundle
 
 A zero-dependency ESM bundle of [mermaid](https://github.com/mermaid-js/mermaid)'s
-parsers. All 26 diagram types, no renderer code — no d3, no cytoscape, no
+parsers. All 34 diagram types, no renderer code — no d3, no cytoscape, no
 katex, no roughjs.
 
 ```bash
@@ -24,24 +24,27 @@ const { type, db } = await parse('flowchart TD\n  A --> B\n  B --> C');
 | Package                                    | `node_modules`           | Transitive deps |
 | ------------------------------------------ | ------------------------ | --------------- |
 | `mermaid`                                  | 114 MB                   | 76              |
-| **`mermaid-parser-bundle`**                | **0.9 MB**               | **0** (zero)    |
+| **`mermaid-parser-bundle`**                | **1.1 MB**               | **0** (zero)    |
 
 **Bundle size after tree-shake** — if you already ship mermaid and bundle
 it with esbuild/rolldown:
 
 | Bundled entry                                          | Raw          | Gzip        |
 | ------------------------------------------------------ | ------------ | ----------- |
-| `import { parse } from 'mermaid'` (esbuild tree-shake) | 2 978 KB     | 816 KB      |
-| **`import { parse } from 'mermaid-parser-bundle'`**    | **1 003 KB** | **269 KB**  |
+| `import { parse } from 'mermaid'` (esbuild tree-shake) | 3 114 KB     | 858 KB      |
+| **`import { parse } from 'mermaid-parser-bundle'`**    | **1 093 KB** | **282 KB**  |
 
 Covers every diagram mermaid registers via `addDiagrams()`:
 flowchart, sequence, class, state, er, gantt, pie, journey, gitGraph, mindmap,
 c4, requirement, quadrantChart, xychart, sankey, block, timeline, kanban,
 packet, info, treemap, treeView, radar, wardley, ishikawa, venn, architecture,
-eventmodeling.
+eventmodeling, swimlane, railroad, railroad-ebnf, railroad-abnf, railroad-peg,
+cynefin.
 
-`flowchartElk` shares the `flowchart-v2` grammar (they differ only in renderer)
-and `error` isn't a user-written type, so neither needs its own entry.
+`swimlane` reuses flowchart's grammar + `FlowDB` (it only swaps the layout
+engine at render time). `flowchartElk` shares the `flowchart-v2` grammar (they
+differ only in renderer) and `error` isn't a user-written type, so neither
+needs its own entry.
 
 ## Development
 
@@ -75,8 +78,8 @@ Outputs:
 
 ### Pinning the mermaid version
 
-`scripts/setup-mermaid-src.sh` clones a specific mermaid tag (defaults to
-`mermaid@11.14.0`). Override:
+`scripts/setup-mermaid-src.sh` checks out a pinned mermaid commit (defaults to
+`180b3831e`, ≈ `mermaid@11.15.0`). `MERMAID_REF` accepts a tag, branch, or SHA:
 
 ```bash
 MERMAID_REF=mermaid@11.15.0 npm run setup
@@ -123,8 +126,8 @@ MERMAID_REF=mermaid@11.15.0 npm run setup
 
 | Slice                                          | Size    |
 | ---------------------------------------------- | ------- |
-| Jison grammars (20 diagrams)                   | 342 KB  |
-| `@mermaid-js/parser` (10 Langium grammars + AST) | 133 KB  |
+| Jison grammars (20 diagrams)                   | 343 KB  |
+| `@mermaid-js/parser` (15 Langium grammars + AST) | 205 KB  |
 | chevrotain (Langium's parser engine)           | 115 KB  |
 | Langium runtime (core parse only)              | 97 KB   |
 | Mermaid utilities                              | 92 KB   |

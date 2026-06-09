@@ -7,7 +7,7 @@
 set -euo pipefail
 
 MERMAID_REPO="${MERMAID_REPO:-https://github.com/mermaid-js/mermaid.git}"
-MERMAID_REF="${MERMAID_REF:-0fbb2e8dd6e843c5c15815f8bbb535ef04dec059}"
+MERMAID_REF="${MERMAID_REF:-180b3831eb20b9479e2e15df11f2dd04a2306fcb}"
 SRC_DIR="$(cd "$(dirname "$0")/.." && pwd)/mermaid-src"
 
 if [ ! -d "$SRC_DIR/.git" ]; then
