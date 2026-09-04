@@ -115,11 +115,9 @@ const DIAGRAMS: Array<{ id: string; detector: Detector; load: () => Promise<Diag
     },
   },
   {
-    // Swimlanes reuses flowchart's parser + FlowDB wholesale; it only swaps the
-    // layout engine at render time, which we drop. `swimlane` is a graph-start
-    // keyword in flow.jison.
+    // Swimlanes reuse flowchart's parser and DB; only the dropped renderer differs.
     id: 'swimlane',
-    detector: (t) => /^\s*swimlane\b/.test(t),
+    detector: (t) => /^\s*swimlane-beta\b/.test(t),
     load: async () => {
       const parser = (await import('@mermaid/src/diagrams/flowchart/parser/flowParser.js')).default;
       const { FlowDB } = await import('@mermaid/src/diagrams/flowchart/flowDb.js');
@@ -341,7 +339,7 @@ const DIAGRAMS: Array<{ id: string; detector: Detector; load: () => Promise<Diag
     // Railroad and its EBNF/ABNF/PEG variants share one Langium `db` singleton
     // but each has its own grammar/parser.
     id: 'railroad',
-    detector: (t) => /^\s*railroad-diagram/i.test(t),
+    detector: (t) => /^\s*railroad-beta/i.test(t),
     load: async () => {
       const { parser } = await import('@mermaid/src/diagrams/railroad/parser/railroadParser.js');
       const db = (await import('@mermaid/src/diagrams/railroad/railroadDb.js')).default;
@@ -350,7 +348,7 @@ const DIAGRAMS: Array<{ id: string; detector: Detector; load: () => Promise<Diag
   },
   {
     id: 'railroadEbnf',
-    detector: (t) => /^\s*railroad-ebnf/i.test(t),
+    detector: (t) => /^\s*railroad-ebnf-beta/i.test(t),
     load: async () => {
       const { parser } = await import('@mermaid/src/diagrams/railroad/parser/ebnfParser.js');
       const db = (await import('@mermaid/src/diagrams/railroad/railroadDb.js')).default;
@@ -359,7 +357,7 @@ const DIAGRAMS: Array<{ id: string; detector: Detector; load: () => Promise<Diag
   },
   {
     id: 'railroadAbnf',
-    detector: (t) => /^\s*railroad-abnf/i.test(t),
+    detector: (t) => /^\s*railroad-abnf-beta/i.test(t),
     load: async () => {
       const { parser } = await import('@mermaid/src/diagrams/railroad/parser/abnfParser.js');
       const db = (await import('@mermaid/src/diagrams/railroad/railroadDb.js')).default;
@@ -368,7 +366,7 @@ const DIAGRAMS: Array<{ id: string; detector: Detector; load: () => Promise<Diag
   },
   {
     id: 'railroadPeg',
-    detector: (t) => /^\s*railroad-peg/i.test(t),
+    detector: (t) => /^\s*railroad-peg-beta/i.test(t),
     load: async () => {
       const { parser } = await import('@mermaid/src/diagrams/railroad/parser/pegParser.js');
       const db = (await import('@mermaid/src/diagrams/railroad/railroadDb.js')).default;

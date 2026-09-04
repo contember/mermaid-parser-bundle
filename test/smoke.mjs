@@ -5,7 +5,7 @@ import { parse } from '../dist/index.mjs';
 const samples = [
   ['flowchart-v2', `flowchart TD\n  A --> B\n  B --> C\n  A --> C`],
   ['flowchart', `graph LR\n  A --> B`],
-  ['swimlane', `swimlane TD\n  A --> B\n  B --> C`],
+  ['swimlane', `swimlane-beta TD\n  A --> B\n  B --> C`],
   ['sequence', `sequenceDiagram\n  Alice->>Bob: Hello\n  Bob-->>Alice: Hi`],
   ['class', `classDiagram\n  class Animal\n  class Dog\n  Animal <|-- Dog`],
   ['er', `erDiagram\n  CUSTOMER ||--o{ ORDER : places`],
@@ -34,10 +34,10 @@ const samples = [
   ['eventmodeling', `eventmodeling\n  tf 01 ui UI\n  tf 02 cmd RunAction\n  tf 03 evt ActionExecuted`],
   ['ishikawa', `ishikawa-beta\n  Blurry Photo\n    Process\n      Out of focus`],
   ['venn', `venn-beta\n  set A\n  set B\n  union A,B`],
-  ['railroad', `railroad-diagram\n  rule = terminal("hello") ;`],
-  ['railroadEbnf', `railroad-ebnf\n  rule = "terminal" ;`],
-  ['railroadAbnf', `railroad-abnf\n  rule = "hello" ;`],
-  ['railroadPeg', `railroad-peg\n  rule <- "hello" ;`],
+  ['railroad', `railroad-beta\n  rule = terminal("hello") ;`],
+  ['railroadEbnf', `railroad-ebnf-beta\n  rule = "terminal" ;`],
+  ['railroadAbnf', `railroad-abnf-beta\n  rule = "hello" ;`],
+  ['railroadPeg', `railroad-peg-beta\n  rule <- "hello" ;`],
   ['cynefin', `cynefin-beta\n  complex\n    "Emergent practice"\n  clear\n    "Best practice"`],
 ];
 

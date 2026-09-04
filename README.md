@@ -23,16 +23,16 @@ const { type, db } = await parse('flowchart TD\n  A --> B\n  B --> C');
 
 | Package                                    | `node_modules`           | Transitive deps |
 | ------------------------------------------ | ------------------------ | --------------- |
-| `mermaid`                                  | 114 MB                   | 76              |
-| **`mermaid-parser-bundle`**                | **1.1 MB**               | **0** (zero)    |
+| `mermaid`                                  | 125 MB                   | 65              |
+| **`mermaid-parser-bundle`**                | **1.0 MB**               | **0** (zero)    |
 
 **Bundle size after tree-shake** — if you already ship mermaid and bundle
 it with esbuild/rolldown:
 
 | Bundled entry                                          | Raw          | Gzip        |
 | ------------------------------------------------------ | ------------ | ----------- |
-| `import { parse } from 'mermaid'` (esbuild tree-shake) | 3 114 KB     | 858 KB      |
-| **`import { parse } from 'mermaid-parser-bundle'`**    | **1 093 KB** | **282 KB**  |
+| `import { parse } from 'mermaid'` (esbuild tree-shake) | 3 366 KB     | 923 KB      |
+| **`import { parse } from 'mermaid-parser-bundle'`**    | **1 099 KB** | **283 KB**  |
 
 Covers every diagram mermaid registers via `addDiagrams()`:
 flowchart, sequence, class, state, er, gantt, pie, journey, gitGraph, mindmap,
@@ -79,10 +79,10 @@ Outputs:
 ### Pinning the mermaid version
 
 `scripts/setup-mermaid-src.sh` checks out a pinned mermaid commit (defaults to
-`180b3831e`, ≈ `mermaid@11.15.0`). `MERMAID_REF` accepts a tag, branch, or SHA:
+`dcb694ddb`, ≈ `mermaid@11.17.2`). `MERMAID_REF` accepts a tag, branch, or SHA:
 
 ```bash
-MERMAID_REF=mermaid@11.15.0 npm run setup
+MERMAID_REF=mermaid@11.17.2 npm run setup
 ```
 
 ### How the bundling works

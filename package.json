@@ -1,7 +1,7 @@
 {
   "name": "mermaid-parser-bundle",
   "version": "0.2.0",
-  "description": "Zero-dependency ESM bundle of mermaid's parsers — all 26 diagram types, no renderer code (no d3, cytoscape, katex, roughjs, …).",
+  "description": "Zero-dependency ESM bundle of mermaid's parsers — all 34 diagram types, no renderer code (no d3, cytoscape, katex, roughjs, …).",
   "type": "module",
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
@@ -60,7 +60,7 @@
     "esbuild": "^0.28.0",
     "jison": "^0.4.18",
     "js-yaml": "^4.1.1",
-    "mermaid": "^11.15.0",
+    "mermaid": "^11.17.2",
     "tsx": "^4.21.0"
   },
   "publishConfig": {
